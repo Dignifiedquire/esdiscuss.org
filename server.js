@@ -37,6 +37,7 @@ var staticOpts = { maxAge: !process.env.NODE_ENV || process.env.NODE_ENV === 'de
 var staticPath = function (dir) {
   return '/static/' + version + '/' + dir;
 }
+
 app.use('/static/' + version, express.static(join(__dirname, 'static'), staticOpts));
 browserify.settings.production('cache', '12 months');
 app.get(staticPath('client/listing.js'), browserify('./client/listing.js'));
