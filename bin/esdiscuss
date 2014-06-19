@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+if (process.env.NEW_RELIC_LICENSE_KEY) require('newrelic');
+var Server = require('./');
+
+var server = new Server({
+  env: process.env.NODE_ENV,
+  cookieSecret: process.env.COOKIE_SECRET,
+  audience: process.env.BROWSERID_AUDIENCE,
+  githubClientId: process.env.GITHUB_CLIENT_ID,
+  githubSecret: process.env.GITHUB_CLIENT_SECRET
+});
+
+
+var port = process.env.PORT;
+
+server.start(port);
