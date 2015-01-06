@@ -10,7 +10,7 @@ var gethub = require('gethub');
 var ms = require('ms');
 var less = require('transform')('less');
 
-function s(n) { return ms(n) / 1000 }
+function s(n) { return ms(n) / 1000; }
 
 //var console = require('./lib/console')('server');
 var version = require('./package.json').version;
@@ -22,21 +22,21 @@ var profiles = require('./profiles');
 var app = express();
 
 app.locals.asset = function (path) {
-  return '/static/' + version + path
-}
+  return '/static/' + version + path;
+};
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/views');
 
 app.use(require('static-favicon')(__dirname + '/favicon.ico'));
 app.use(function (req, res, next) {
-  res.locals.path = req.path
-  next()
-})
+  res.locals.path = req.path;
+  next();
+});
 
 var staticOpts = { maxAge: !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 0 : ms('12 months') };
 var staticPath = function (dir) {
   return '/static/' + version + '/' + dir;
-}
+};
 
 app.use('/static/' + version, express.static(join(__dirname, 'static'), staticOpts));
 browserify.settings.production('cache', '12 months');
@@ -61,7 +61,7 @@ app.get('/about', function (req, res, next) {
       allTime: stats
     });
   }).done(null, next);
-})
+});
 
 app.get('/:page', function (req, res, next) {
   if (!/^\d+$/.test(req.params.page)) return next();
@@ -88,7 +88,7 @@ app.get('/topic/:id', function (req, res, next) {
 
       topic.forEach(function (message) {
         message.edited = processor.renderMessage(message.edited);
-        message.date = moment(message.date)
+        message.date = moment(message.date);
       });
       res.render('topic', {
         topic: topic[0],
@@ -100,7 +100,7 @@ app.get('/topic/:id', function (req, res, next) {
   db.getNewLocation(req.params.id)
     .done(function (newLocation) {
       if (!newLocation) return next();
-      res.redirect(301, '/topic/' + newLocation)
+      res.redirect(301, '/topic/' + newLocation);
     }, next);
 });
 
@@ -112,7 +112,7 @@ app.get('/pipermail/es-discuss/:month/:id.html', function (req, res, next) {
       res.redirect(301, location);
     })
     .done(null, next);
-})
+});
 
 app.use(require('./lib/notes.js'));
 
@@ -126,7 +126,7 @@ passport.serializeUser(function (user, done) {
   done(null, user.email);
 });
 passport.deserializeUser(function (email, done) {
-  db.user(email).nodeify(done)
+  db.user(email).nodeify(done);
 });
 
 var audience = process.env.BROWSERID_AUDIENCE || 'http://localhost:3000';
@@ -134,7 +134,7 @@ passport.use(new PersonaStrategy({
     audience: audience
   },
   function (email, done) {
-    db.user(email).nodeify(done)
+    db.user(email).nodeify(done);
   }
 ));
 passport.use(new GitHubStrategy({
